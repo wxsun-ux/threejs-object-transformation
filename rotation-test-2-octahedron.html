@@ -55,7 +55,7 @@
         orbitControls.maxDistance = 20;
 
         // add octahedron
-        var octahedronGeometry = new THREE.OctahedronGeometry(1,0);
+        var octahedronGeometry = new THREE.OctahedronGeometry(0.8, 0);
         octahedronGeometry.faces[0].color.setHex( 0x7fd1dd );
         octahedronGeometry.faces[1].color.setHex( 0xf26d64 );
         octahedronGeometry.faces[2].color.setHex( 0xcb79ff );
@@ -86,7 +86,7 @@
         octahedronTransformControls.setSpace( "world" );
         octahedronTransformControls.visible = false;
 
-        var octahedronGeometry_target = new THREE.OctahedronGeometry(1,0);
+        var octahedronGeometry_target = new THREE.OctahedronGeometry(0.8, 0);
         octahedronGeometry_target.faces[0].color.setHex( 0x7fd1dd );
         octahedronGeometry_target.faces[1].color.setHex( 0xf26d64 );
         octahedronGeometry_target.faces[2].color.setHex( 0xcb79ff );
@@ -106,7 +106,7 @@
         octahedronMesh_target.rotation.set(0.4,0.4,0.4);
         scene.add(octahedronMesh_target);
 
-        var octahedronGeometry_helper = new THREE.OctahedronGeometry(1,0);
+        var octahedronGeometry_helper = new THREE.OctahedronGeometry(0.8, 0);
         var octahedronMaterial_helper =new THREE.PointsMaterial({
             color:0xffffff,
             size: 0.05
