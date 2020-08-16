@@ -11,7 +11,7 @@
     <div class="block" id="block"></div>
 
     <div class="container">
-        <span class="min" id="dd">20</span><span class="sen">s</span>
+        <span class="min" id="dd">10</span><span class="sen">s</span>
         <input type="button" value="开始"  onclick="start()" class="btn" id="timesum" />
     </div>
 
@@ -241,7 +241,7 @@
         function run(){
             var s = document.getElementById("dd");
             if(s.innerHTML == 0){
-                window.location.href='regform.shtml';
+                window.location.href='end-page.html';
                 return false;
             }
             s.innerHTML = s.innerHTML * 1 - 1;
