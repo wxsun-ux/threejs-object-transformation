@@ -733,7 +733,7 @@ THREE.TransformControlsGizmo = function () {
 	// shared materials
 
 	var gizmoMaterial = new THREE.MeshBasicMaterial( {
-		// depthTest: false,
+		depthTest: false,
 		depthWrite: false,
 		transparent: true,
 		side: THREE.DoubleSide,
@@ -741,7 +741,7 @@ THREE.TransformControlsGizmo = function () {
 	} );
 
 	var gizmoLineMaterial = new THREE.LineBasicMaterial( {
-		// depthTest: false,
+		depthTest: false,
 		depthWrite: false,
 		transparent: true,
 		linewidth: 1,
@@ -808,10 +808,10 @@ THREE.TransformControlsGizmo = function () {
 
 	var arrowGeometry = new THREE.CylinderBufferGeometry( 0, 0.05, 0.2, 12, 1, false );
 
-	var scaleHandleGeometry = new THREE.BoxBufferGeometry( 0.1, 0.1, 0.1 );
+	var scaleHandleGeometry = new THREE.BoxBufferGeometry( 0.125, 0.125, 0.125 );
 
 	var lineGeometry = new THREE.BufferGeometry( );
-	lineGeometry.setAttribute( 'position', new THREE.Float32BufferAttribute( [ 0, 0, 0,	1.5, 0, 0 ], 3 ) );
+	lineGeometry.setAttribute( 'position', new THREE.Float32BufferAttribute( [ 0, 0, 0,	1, 0, 0 ], 3 ) );
 
 	var CircleGeometry = function ( radius, arc ) {
 
@@ -976,15 +976,15 @@ THREE.TransformControlsGizmo = function () {
 
 	var gizmoScale = {
 		X: [
-			[ new THREE.Mesh( scaleHandleGeometry, matRed ), [ 1.15, 0, 0 ], [ 0, 0, - Math.PI / 2 ]],
+			[ new THREE.Mesh( scaleHandleGeometry, matRed ), [ 0.8, 0, 0 ], [ 0, 0, - Math.PI / 2 ]],
 			[ new THREE.Line( lineGeometry, matLineRed ), null, null, [ 0.8, 1, 1 ]]
 		],
 		Y: [
-			[ new THREE.Mesh( scaleHandleGeometry, matGreen ), [ 0, 1.15, 0 ]],
+			[ new THREE.Mesh( scaleHandleGeometry, matGreen ), [ 0, 0.8, 0 ]],
 			[ new THREE.Line( lineGeometry, matLineGreen ), null, [ 0, 0, Math.PI / 2 ], [ 0.8, 1, 1 ]]
 		],
 		Z: [
-			[ new THREE.Mesh( scaleHandleGeometry, matBlue ), [ 0, 0, 1.15 ], [ Math.PI / 2, 0, 0 ]],
+			[ new THREE.Mesh( scaleHandleGeometry, matBlue ), [ 0, 0, 0.8 ], [ Math.PI / 2, 0, 0 ]],
 			[ new THREE.Line( lineGeometry, matLineBlue ), null, [ 0, - Math.PI / 2, 0 ], [ 0.8, 1, 1 ]]
 		],
 		XY: [
@@ -1003,7 +1003,7 @@ THREE.TransformControlsGizmo = function () {
 			// [ new THREE.Line( lineGeometry, matLineMagenta ), [ 0.98, 0, 0.855 ], [ 0, - Math.PI / 2, 0 ], [ 0.125, 1, 1 ]]
 		],
 		XYZX: [
-			// [ new THREE.Mesh( new THREE.BoxBufferGeometry( 0.125, 0.125, 0.125 ), matWhiteTransparent.clone() ), [ 1.1, 0, 0 ]],
+			// [ new THREE.Mesh( new THREE.BoxBufferGeometry( 0.1, 0.1, 0.1 ), matWhiteTransparent.clone() ), [ 1.1, 0, 0 ]],
 		],
 		XYZY: [
 			// [ new THREE.Mesh( new THREE.BoxBufferGeometry( 0.125, 0.125, 0.125 ), matWhiteTransparent.clone() ), [ 0, 1.1, 0 ]],
@@ -1215,7 +1215,7 @@ THREE.TransformControlsGizmo = function () {
 					if ( this.axis === 'X' ) {
 
 						tempQuaternion.setFromEuler( tempEuler.set( 0, 0, 0 ) );
-						handle.quaternion.copy( quaternion ).multiply( tempQuaternion );
+						// handle.quaternion.copy( quaternion ).multiply( tempQuaternion );
 
 						if ( Math.abs( alignVector.copy( unitX ).applyQuaternion( quaternion ).dot( this.eye ) ) > 0.9 ) {
 
@@ -1393,7 +1393,7 @@ THREE.TransformControlsGizmo = function () {
 
 				// }
 
-				// // Flip translate and scale axis ocluded behind another axis
+				// Flip translate and scale axis ocluded behind another axis
 
 				// if ( handle.name.search( 'X' ) !== - 1 ) {
 
