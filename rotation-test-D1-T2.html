@@ -8,11 +8,15 @@
   <link rel="stylesheet" type="text/css" href="css/style.css"/>
 </head>
 <body>
-    <div class="block" id="block"></div>
 
-    <div class="container">
-        <span class="min" id="dd">10</span><span class="sen">s</span>
-        <input type="button" value="开始"  onclick="start()" class="btn" id="timesum" />
+    <div class="block" id="block"></div>
+    
+    <div class="btns">
+        <input type="button" value="开始"  onclick="timecount()" class="btn" id="timesum" />
+        <div class="con"></div>
+        <input type="button" value="完成" onclick="timestop()" class="btn" id="timestop" disabled="disabled"/>
+        <div class="con"></div>
+        <input type="button" value="下一步" onclick="subm()" class="btn" id="subm" disabled="disabled"/>
     </div>
 
     <script>
@@ -34,7 +38,7 @@
             0.1,
             10000
         );
-        camera.position.set(-3, 4, -4);
+        camera.position.set(-4, 3, 4);
         camera.lookAt(new THREE.Vector3(0, 0, 0));
 
         // set light
@@ -50,32 +54,33 @@
         scene.add(gridHelper);
 
         // add octahedron
-        var octahedronGeometry = new THREE.OctahedronGeometry(1,0);
-        octahedronGeometry.faces[0].color.setHex( 0x808080 );
+        var octahedronGeometry = new THREE.OctahedronGeometry(0.8,0);
+        octahedronGeometry.faces[0].color.setHex( 0x7fd1dd );
         octahedronGeometry.faces[1].color.setHex( 0xf26d64 );
         octahedronGeometry.faces[2].color.setHex( 0xcb79ff );
-        octahedronGeometry.faces[3].color.setHex( 0xf79361 );
-        octahedronGeometry.faces[4].color.setHex( 0x7fd1dd );
-        octahedronGeometry.faces[5].color.setHex( 0x82c892 );
+        octahedronGeometry.faces[3].color.setHex( 0x1a1365 );
+        octahedronGeometry.faces[4].color.setHex( 0x82c892 );
+        octahedronGeometry.faces[5].color.setHex( 0x808080 );
         octahedronGeometry.faces[6].color.setHex( 0xf6f05e );
-        octahedronGeometry.faces[7].color.setHex( 0xffffff );
+        octahedronGeometry.faces[7].color.setHex( 0xf79361 );
         var octahedronMaterial = new THREE.MeshBasicMaterial({
             vertexColors: THREE.FaceColors
         });
 
         var octahedronMesh = new THREE.Mesh( octahedronGeometry, octahedronMaterial );
         octahedronMesh.position.set(0, 0, 0);
+        octahedronMesh.rotation.set(0, 0, 0);
         scene.add(octahedronMesh);
 
-        var octahedronGeometry_target = new THREE.OctahedronGeometry(1,0);
-        octahedronGeometry_target.faces[0].color.setHex( 0x808080 );
+        var octahedronGeometry_target = new THREE.OctahedronGeometry(0.8,0);
+        octahedronGeometry_target.faces[0].color.setHex( 0x7fd1dd );
         octahedronGeometry_target.faces[1].color.setHex( 0xf26d64 );
         octahedronGeometry_target.faces[2].color.setHex( 0xcb79ff );
-        octahedronGeometry_target.faces[3].color.setHex( 0xf79361 );
-        octahedronGeometry_target.faces[4].color.setHex( 0x7fd1dd );
-        octahedronGeometry_target.faces[5].color.setHex( 0x82c892 );
+        octahedronGeometry_target.faces[3].color.setHex( 0x1a1365 );
+        octahedronGeometry_target.faces[4].color.setHex( 0x82c892 );
+        octahedronGeometry_target.faces[5].color.setHex( 0x808080 );
         octahedronGeometry_target.faces[6].color.setHex( 0xf6f05e );
-        octahedronGeometry_target.faces[7].color.setHex( 0xffffff );
+        octahedronGeometry_target.faces[7].color.setHex( 0xf79361 );
         var octahedronMaterial_target = new THREE.MeshBasicMaterial({
             vertexColors: THREE.FaceColors,
             transparent: true,
@@ -83,8 +88,20 @@
         });
 
         var octahedronMesh_target = new THREE.Mesh( octahedronGeometry_target, octahedronMaterial_target );
-        octahedronMesh_target.position.set(4, 2, 3);
+        octahedronMesh_target.position.set(3, 0, 0);
+        octahedronMesh_target.rotation.set(0.4,0.4,0.4);
         scene.add(octahedronMesh_target);
+
+        var octahedronGeometry_helper = new THREE.OctahedronGeometry(0.8,0);
+        var octahedronMaterial_helper =new THREE.PointsMaterial({
+            color:0xffffff,
+            size: 0.05
+        });
+
+        var octahedronPoints = new THREE.Points( octahedronGeometry_helper, octahedronMaterial_helper );
+        octahedronPoints.position.set(0, 0, 0);
+        octahedronPoints.rotation.set(0.4,0.4,0.4);
+        scene.add( octahedronPoints );
 
         // add orbit controls
         var orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -122,7 +139,9 @@
         controls_octahedron.showAll(false);
         controls_octahedron.showByNames(
             [
-            FreeformControls.DEFAULT_HANDLE_GROUP_NAME.PICK
+            FreeformControls.DEFAULT_HANDLE_GROUP_NAME.XR,
+            FreeformControls.DEFAULT_HANDLE_GROUP_NAME.YR,
+            FreeformControls.DEFAULT_HANDLE_GROUP_NAME.ZR,
             ],
             true
         );
@@ -135,19 +154,44 @@
             orbitControls.enabled = true;
         });
 
-        function run(){
-            var s = document.getElementById("dd");
-            if(s.innerHTML == 0){
-                window.location.href='end-page.html';
-                return false;
-            }
-            s.innerHTML = s.innerHTML * 1 - 1;
+
+        // time count
+        var timeCount = 0;
+        var time = 0;
+        var con = {};
+        var json;
+
+        function timecount(){
+            document.getElementById("block").style.display="none";
+            document.getElementById("timestop").disabled=false;
+            // document.getElementById("time").value = timeCount;
+            timeCount++;
+            setTimeout("timecount()",1); 
+            document.getElementById("timesum").disabled=true;
         }
 
-        function start(){
-            document.getElementById("timesum").disabled=true;
-            document.getElementById("block").style.display="none";
-            window.setInterval("run();", 1000);
+        function timestop(){
+            clearTimeout(timeCount);
+            time = timeCount;
+            record_data();
+            document.getElementById("timestop").disabled=true;
+            document.getElementById("subm").disabled=false;
+        }
+
+        function subm(){
+            window.location.href="rotation-test-D1-T3.html";
+        }
+
+        function record_data(){
+            con["r_d1_task2_time"] = time;
+            con["r_d1_task2_x"] = octahedronMesh.rotation.x;
+            con["r_d1_task2_y"] = octahedronMesh.rotation.y;
+            con["r_d1_task2_z"] = octahedronMesh.rotation.z;
+            json = JSON.stringify(con);
+            localStorage.rd1t2 = json;
+            // window.localStorage.setItem("test", "test");
+            // localStorage.r_d1_task1 = json;
+            // json=JSON.parse(localStorage.getItem("R-D1-Task1"));
         }
         
     </script>

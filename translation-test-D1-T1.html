@@ -9,10 +9,13 @@
 </head>
 <body>
     <div class="block" id="block"></div>
-
-    <div class="container">
-        <span class="min" id="dd">10</span><span class="sen">s</span>
-        <input type="button" value="开始"  onclick="start()" class="btn" id="timesum" />
+    
+    <div class="btns">
+        <input type="button" value="开始"  onclick="timecount()" class="btn" id="timesum" />
+        <div class="con"></div>
+        <input type="button" value="完成" onclick="timestop()" class="btn" id="timestop" disabled="disabled"/>
+        <div class="con"></div>
+        <input type="button" value="下一步" onclick="subm()" class="btn" id="subm" disabled="disabled"/>
     </div>
 
     <script>
@@ -112,7 +115,9 @@
         controls_box.showAll(false);
         controls_box.showByNames(
             [
-            FreeformControls.DEFAULT_HANDLE_GROUP_NAME.PICK
+            FreeformControls.DEFAULT_HANDLE_GROUP_NAME.XPT,
+            FreeformControls.DEFAULT_HANDLE_GROUP_NAME.YPT,
+            FreeformControls.DEFAULT_HANDLE_GROUP_NAME.ZPT,
             ],
             true
         );
@@ -125,19 +130,43 @@
             orbitControls.enabled = true;
         });
 
-        function run(){
-            var s = document.getElementById("dd");
-            if(s.innerHTML == 0){
-                window.location.href='end-page.html';
-                return false;
-            }
-            s.innerHTML = s.innerHTML * 1 - 1;
+        // time count
+        var timeCount = 0;
+        var time = 0;
+        var con = {};
+        var json;
+
+        function timecount(){
+            document.getElementById("block").style.display="none";
+            document.getElementById("timestop").disabled=false;
+            // document.getElementById("time").value = timeCount;
+            timeCount++;
+            setTimeout("timecount()",1); 
+            document.getElementById("timesum").disabled=true;
         }
 
-        function start(){
-            document.getElementById("timesum").disabled=true;
-            document.getElementById("block").style.display="none";
-            window.setInterval("run();", 1000);
+        function timestop(){
+            clearTimeout(timeCount);
+            time = timeCount;
+            record_data();
+            document.getElementById("timestop").disabled=true;
+            document.getElementById("subm").disabled=false;
+        }
+
+        function subm(){
+            window.location.href="translation-test-D1-T2.html";
+        }
+
+        function record_data(){
+            con["t_d1_task1_time"] = time;
+            con["t_d1_task1_x"] = boxMesh.position.x;
+            con["t_d1_task1_y"] = boxMesh.position.y;
+            con["t_d1_task1_z"] = boxMesh.position.z;
+            json = JSON.stringify(con);
+            localStorage.td1t1 = json;
+            // window.localStorage.setItem("test", "test");
+            // localStorage.r_d1_task1 = json;
+            // json=JSON.parse(localStorage.getItem("R-D1-Task1"));
         }
         
     </script>

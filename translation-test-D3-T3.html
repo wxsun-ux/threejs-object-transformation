@@ -9,10 +9,13 @@
 </head>
 <body>
     <div class="block" id="block"></div>
-
-    <div class="container">
-        <span class="min" id="dd">10</span><span class="sen">s</span>
-        <input type="button" value="开始"  onclick="start()" class="btn" id="timesum" />
+    
+    <div class="btns">
+        <input type="button" value="开始"  onclick="timecount()" class="btn" id="timesum" />
+        <div class="con"></div>
+        <input type="button" value="完成" onclick="timestop()" class="btn" id="timestop" disabled="disabled"/>
+        <div class="con"></div>
+        <input type="button" value="下一步" onclick="subm()" class="btn" id="subm" disabled="disabled"/>
     </div>
 
     <script>
@@ -34,7 +37,7 @@
             0.1,
             10000
         );
-        camera.position.set(6, 2, 3);
+        camera.position.set(-3, 4, -4);
         camera.lookAt(new THREE.Vector3(0, 0, 0));
 
         // set light
@@ -62,7 +65,6 @@
 
         var tetrahedronMesh = new THREE.Mesh( tetrahedronGeometry, tetrahedronMaterial );
         tetrahedronMesh.position.set(0, 0, 0);
-        tetrahedronMesh.rotation.set(0.5, 0.2, 0.3);
         scene.add(tetrahedronMesh);
 
         var tetrahedronGeometry_target = new THREE.TetrahedronGeometry( 1, 0 );
@@ -78,19 +80,8 @@
         });
 
         var tetrahedronMesh_target = new THREE.Mesh( tetrahedronGeometry_target, tetrahedronMaterial_target );
-        tetrahedronMesh_target.position.set(3, 0, 0);
+        tetrahedronMesh_target.position.set(4, 2, 3);
         scene.add(tetrahedronMesh_target);
-
-        var tetrahedronGeometry_helper = new THREE.TetrahedronGeometry( 1, 0 );
-        var tetrahedronMaterial_helper =new THREE.PointsMaterial({
-            color:0xffffff,
-            size: 0.05
-        });
-
-        var tetrahedronPoints = new THREE.Points( tetrahedronGeometry_helper, tetrahedronMaterial_helper );
-        tetrahedronPoints.position.set(0, 0, 0);
-        scene.add( tetrahedronPoints );
-
 
         // add orbit controls
         var orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -128,9 +119,7 @@
         controls_tetrahedron.showAll(false);
         controls_tetrahedron.showByNames(
             [
-            FreeformControls.DEFAULT_HANDLE_GROUP_NAME.XR,
-            FreeformControls.DEFAULT_HANDLE_GROUP_NAME.YR,
-            FreeformControls.DEFAULT_HANDLE_GROUP_NAME.ZR,
+            FreeformControls.DEFAULT_HANDLE_GROUP_NAME.PICK
             ],
             true
         );        
@@ -143,19 +132,43 @@
             orbitControls.enabled = true;
         });
 
-        function run(){
-            var s = document.getElementById("dd");
-            if(s.innerHTML == 0){
-                window.location.href='end-page.html';
-                return false;
-            }
-            s.innerHTML = s.innerHTML * 1 - 1;
+        // time count
+        var timeCount = 0;
+        var time = 0;
+        var con = {};
+        var json;
+
+        function timecount(){
+            document.getElementById("block").style.display="none";
+            document.getElementById("timestop").disabled=false;
+            // document.getElementById("time").value = timeCount;
+            timeCount++;
+            setTimeout("timecount()",1); 
+            document.getElementById("timesum").disabled=true;
         }
 
-        function start(){
-            document.getElementById("timesum").disabled=true;
-            document.getElementById("block").style.display="none";
-            window.setInterval("run();", 1000);
+        function timestop(){
+            clearTimeout(timeCount);
+            time = timeCount;
+            record_data();
+            document.getElementById("timestop").disabled=true;
+            document.getElementById("subm").disabled=false;
+        }
+
+        function subm(){
+            window.location.href="translation-test-D3-T4.html";
+        }
+
+        function record_data(){
+            con["t_d3_task3_time"] = time;
+            con["t_d3-task3_x"] = tetrahedronMesh.position.x;
+            con["t_d3_task3_y"] = tetrahedronMesh.position.y;
+            con["t_d3_task3_z"] = tetrahedronMesh.position.z;
+            json = JSON.stringify(con);
+            localStorage.td3t3 = json;
+            // window.localStorage.setItem("test", "test");
+            // localStorage.r_d1_task1 = json;
+            // json=JSON.parse(localStorage.getItem("R-D1-Task1"));
         }
         
     </script>

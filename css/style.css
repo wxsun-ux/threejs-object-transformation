@@ -4,21 +4,24 @@ body {
 	overflow: hidden;
 	margin: unset;
 	font-family:"Microsoft YaHei",微软雅黑,"MicrosoftJhengHei",华文细黑,STHeiti,MingLiu;
-	color: aliceblue;
 }
 
 /* 首页、尾页css */
 .container{
-	position: absolute;
+	position: relative;
 	width: 100%;
+	padding-top: 150px;
 	text-align: center;
 	user-select:none;
-	top:10px;
 }
 
-.btn{
+.em{
+	color: red;
+}
+
+.next{
 	position: relative;
-	width: 80px;
+	width: 72px;
 	height: 36px;
 	background:#F0F0F0 repeat-x;
 	padding-top:3px;
@@ -30,13 +33,48 @@ body {
 	cursor:hand;
 }
 
-.min{
-	position: relative;
+
+/* 实验界面css */
+
+.title{
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	font-size: 16px;
+	color: #666666;
+	user-select:none;
 }
 
-.sen{
+.title_instr{
+	color: #cccccc;
+}
+
+.btns{
+	position: absolute;
+	left: 50px;
+	top: 450px;
+	width: 100px;
+	height: auto;
+}
+
+.btn{
 	position: relative;
-	padding-right: 10px;
+	width: 80%;
+	height: 36px;
+	background:#F0F0F0 repeat-x;
+	padding-top:3px;
+	border-top:1px solid #708090;
+	border-right:1px solid #708090;
+	border-bottom:1px solid #708090;
+	border-left:1px solid #708090;
+	font-size:10pt;
+	cursor:hand;
+}
+
+.con{
+	position: relative;
+	width: 100%;
+	height: 20px;
 }
 
 .block{
@@ -45,11 +83,4 @@ body {
 	left: 0px;
 	height: 100%;
 	width: 100%;
-}
-
-.text{
-	position: relative;
-	color: #000000;
-	padding-top: 200px;
-	font-size: 30px;
 }
