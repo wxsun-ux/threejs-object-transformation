@@ -52,42 +52,32 @@
         gridHelper.position.y -= 2;
         scene.add(gridHelper);
 
-        // add octahedron
-        var octahedronGeometry = new THREE.OctahedronGeometry(1,0);
-        octahedronGeometry.faces[0].color.setHex( 0x808080 );
-        octahedronGeometry.faces[1].color.setHex( 0xf26d64 );
-        octahedronGeometry.faces[2].color.setHex( 0xcb79ff );
-        octahedronGeometry.faces[3].color.setHex( 0xf79361 );
-        octahedronGeometry.faces[4].color.setHex( 0x7fd1dd );
-        octahedronGeometry.faces[5].color.setHex( 0x82c892 );
-        octahedronGeometry.faces[6].color.setHex( 0xf6f05e );
-        octahedronGeometry.faces[7].color.setHex( 0xffffff );
-        var octahedronMaterial = new THREE.MeshBasicMaterial({
-            vertexColors: THREE.FaceColors
-        });
+        // add box 
+        var boxGeometry = new THREE.BoxGeometry(0.5,1,1);
+        var boxMaterial = [
+            new THREE.MeshBasicMaterial({color:0xffffff}),
+            new THREE.MeshBasicMaterial({color:0xf6f05e}),
+            new THREE.MeshBasicMaterial({color:0x82c892}),
+            new THREE.MeshBasicMaterial({color:0x7fd1dd}),
+            new THREE.MeshBasicMaterial({color:0xf79361}),
+            new THREE.MeshBasicMaterial({color:0xcb79ff})
+        ];
+        var boxMesh = new THREE.Mesh( boxGeometry, boxMaterial );
+        boxMesh.position.set(0, 0, 0);
+        scene.add(boxMesh);
 
-        var octahedronMesh = new THREE.Mesh( octahedronGeometry, octahedronMaterial );
-        octahedronMesh.position.set(0, 0, 0);
-        scene.add(octahedronMesh);
-
-        var octahedronGeometry_target = new THREE.OctahedronGeometry(1,0);
-        octahedronGeometry_target.faces[0].color.setHex( 0x808080 );
-        octahedronGeometry_target.faces[1].color.setHex( 0xf26d64 );
-        octahedronGeometry_target.faces[2].color.setHex( 0xcb79ff );
-        octahedronGeometry_target.faces[3].color.setHex( 0xf79361 );
-        octahedronGeometry_target.faces[4].color.setHex( 0x7fd1dd );
-        octahedronGeometry_target.faces[5].color.setHex( 0x82c892 );
-        octahedronGeometry_target.faces[6].color.setHex( 0xf6f05e );
-        octahedronGeometry_target.faces[7].color.setHex( 0xffffff );
-        var octahedronMaterial_target = new THREE.MeshBasicMaterial({
-            vertexColors: THREE.FaceColors,
-            transparent: true,
-            opacity: 0.5
-        });
-
-        var octahedronMesh_target = new THREE.Mesh( octahedronGeometry_target, octahedronMaterial_target );
-        octahedronMesh_target.position.set(4, 2, 3);
-        scene.add(octahedronMesh_target);
+        var boxGeometry_target = new THREE.BoxGeometry(0.5,1,1);
+        var boxMaterial_target = [
+            new THREE.MeshBasicMaterial({color:0xffffff, transparent: true, opacity: 0.5}),
+            new THREE.MeshBasicMaterial({color:0xf6f05e, transparent: true, opacity: 0.5}),
+            new THREE.MeshBasicMaterial({color:0x82c892, transparent: true, opacity: 0.5}),
+            new THREE.MeshBasicMaterial({color:0x7fd1dd, transparent: true, opacity: 0.5}),
+            new THREE.MeshBasicMaterial({color:0xf79361, transparent: true, opacity: 0.5}),
+            new THREE.MeshBasicMaterial({color:0xcb79ff, transparent: true, opacity: 0.5})
+        ];
+        var boxMesh_target = new THREE.Mesh( boxGeometry_target, boxMaterial_target );
+        boxMesh_target.position.set(4, 2, 3);
+        scene.add(boxMesh_target);
 
         // add orbit controls
         var orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -116,14 +106,14 @@
         const controlsManager = new FreeformControls.ControlsManager(camera, renderer.domElement);
         scene.add(controlsManager);
 
-        // anchor controls to the octahedron
-        const controls_octahedron = controlsManager.anchor(octahedronMesh, {
+        // anchor controls to the box
+        const controls_box = controlsManager.anchor(boxMesh, {
             hideOtherHandlesOnDrag: false,
             showHelperPlane: false
         });
 
-        controls_octahedron.showAll(false);
-        controls_octahedron.showByNames(
+        controls_box.showAll(false);
+        controls_box.showByNames(
             [
             FreeformControls.DEFAULT_HANDLE_GROUP_NAME.XPT,
             FreeformControls.DEFAULT_HANDLE_GROUP_NAME.YPT,
@@ -169,9 +159,9 @@
 
         function record_data(){
             con["t_d1_task2_time"] = time;
-            con["t_d1_task2_x"] = octahedronMesh.position.x;
-            con["t_d1_task2_y"] = octahedronMesh.position.y;
-            con["t_d1_task2_z"] = octahedronMesh.position.z;
+            con["t_d1_task2_x"] = boxMesh.position.x;
+            con["t_d1_task2_y"] = boxMesh.position.y;
+            con["t_d1_task2_z"] = boxMesh.position.z;
             json = JSON.stringify(con);
             localStorage.td1t2 = json;
             // window.localStorage.setItem("test", "test");

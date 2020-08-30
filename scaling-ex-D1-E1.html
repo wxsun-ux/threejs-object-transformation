@@ -4,11 +4,10 @@
   <meta charset="UTF-8">
   <script type="text/javascript" src="js/three.min.js"></script>
   <script type="text/javascript" src="js/OrbitControls.js"></script>
-  <script type="text/javascript" src="js/TransformControls.js"></script>
+  <script type="text/javascript" src="js/TransformControls-3.js"></script>
   <link rel="stylesheet" type="text/css" href="css/style.css"/>
 </head>
 <body>
-    
     <div class="block" id="block"></div>
     
     <div class="btns">
@@ -59,7 +58,7 @@
         orbitControls.maxDistance = 20;
 
         // add box 
-        var boxGeometry = new THREE.BoxGeometry(0.7,0.7,1);
+        var boxGeometry = new THREE.BoxGeometry(1,1,1);
         var boxMaterial = [
             new THREE.MeshBasicMaterial({color:0xf6f05e}),
             new THREE.MeshBasicMaterial({color:0x1a1365}),
@@ -82,10 +81,10 @@
         scene.add( boxTransformControls );
 
         boxTransformControls.setMode( "scale" );
-        boxTransformControls.setSpace( "world" );
+        boxTransformControls.setSpace( "local" );
         boxTransformControls.visible = true;
 
-        var boxGeometry_target = new THREE.BoxGeometry(2.1,2.1,3);
+        var boxGeometry_target = new THREE.BoxGeometry(3,3,3);
         var boxMaterial_target = [
             new THREE.MeshBasicMaterial({color:0xf6f05e, transparent: true, opacity: 0.3}),
             new THREE.MeshBasicMaterial({color:0x1a1365, transparent: true, opacity: 0.3}),
@@ -98,7 +97,7 @@
         boxMesh_target.position.set(0, 0, 0);
         scene.add(boxMesh_target);
 
-        var boxGeometry_helper = new THREE.BoxGeometry(2.1,2.1,3);
+        var boxGeometry_helper = new THREE.BoxGeometry(3,3,3);
         var boxMaterial_helper =new THREE.PointsMaterial({
             color:0xffffff,
             size: 0.05
@@ -128,45 +127,24 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         }
 
-        // time count
-        var timeCount = 0;
-        var time = 0;
-        var con = {};
-        var json;
+        // click action
 
         function timecount(){
             document.getElementById("block").style.display="none";
             document.getElementById("timestop").disabled=false;
-            // document.getElementById("time").value = timeCount;
-            timeCount++;
-            setTimeout("timecount()",1); 
+
             document.getElementById("timesum").disabled=true;
         }
 
         function timestop(){
-            clearTimeout(timeCount);
-            time = timeCount;
-            record_data();
             document.getElementById("timestop").disabled=true;
             document.getElementById("subm").disabled=false;
         }
 
         function subm(){
-            window.location.href="scaling-test-D3-T4.html";
+            window.location.href="scaling-ex-D1-E2.html";
         }
-
-        function record_data(){
-            con["s_d3_task3_time"] = time;
-            con["s_d3_task3_x"] = boxMesh.scale.x;
-            con["s_d3_task3_y"] = boxMesh.scale.y;
-            con["s_d3_task3_z"] = boxMesh.scale.z;
-            json = JSON.stringify(con);
-            localStorage.sd3t3 = json;
-            // window.localStorage.setItem("test", "test");
-            // localStorage.r_d1_task1 = json;
-            // json=JSON.parse(localStorage.getItem("R-D1-Task1"));
-        }
-
+        
     </script>
 </body>
 </html>

@@ -4,11 +4,10 @@
   <meta charset="UTF-8">
   <script type="text/javascript" src="js/three.min.js"></script>
   <script type="text/javascript" src="js/OrbitControls.js"></script>
-  <script type="text/javascript" src="js/TransformControls.js"></script>
+  <script type="text/javascript" src="js/three-freeform-controls.umd.js"></script>
   <link rel="stylesheet" type="text/css" href="css/style.css"/>
 </head>
 <body>
-    
     <div class="block" id="block"></div>
     
     <div class="btns">
@@ -38,7 +37,7 @@
             0.1,
             10000
         );
-        camera.position.set(5, 4, 4);
+        camera.position.set(-3, 4, -4);
         camera.lookAt(new THREE.Vector3(0, 0, 0));
 
         // set light
@@ -53,16 +52,11 @@
         gridHelper.position.y -= 2;
         scene.add(gridHelper);
 
-        // add orbit controls
-        var orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
-        orbitControls.minDistance = 5;
-        orbitControls.maxDistance = 20;
-
         // add box 
-        var boxGeometry = new THREE.BoxGeometry(0.7,0.7,1);
+        var boxGeometry = new THREE.BoxGeometry(1,1,1);
         var boxMaterial = [
+            new THREE.MeshBasicMaterial({color:0xffffff}),
             new THREE.MeshBasicMaterial({color:0xf6f05e}),
-            new THREE.MeshBasicMaterial({color:0x1a1365}),
             new THREE.MeshBasicMaterial({color:0x82c892}),
             new THREE.MeshBasicMaterial({color:0x7fd1dd}),
             new THREE.MeshBasicMaterial({color:0xf79361}),
@@ -70,53 +64,31 @@
         ];
         var boxMesh = new THREE.Mesh( boxGeometry, boxMaterial );
         boxMesh.position.set(0, 0, 0);
-        scene.add(boxMesh)
+        scene.add(boxMesh);
 
-        var boxTransformControls = new THREE.TransformControls( camera, renderer.domElement );
-        boxTransformControls.addEventListener( 'change', render );
-        boxTransformControls.addEventListener( 'dragging-changed', function ( event ) {
-            orbitControls.enabled = ! event.value;;
-        } );
-
-        boxTransformControls.attach( boxMesh );
-        scene.add( boxTransformControls );
-
-        boxTransformControls.setMode( "scale" );
-        boxTransformControls.setSpace( "world" );
-        boxTransformControls.visible = true;
-
-        var boxGeometry_target = new THREE.BoxGeometry(2.1,2.1,3);
+        var boxGeometry_target = new THREE.BoxGeometry(1,1,1);
         var boxMaterial_target = [
-            new THREE.MeshBasicMaterial({color:0xf6f05e, transparent: true, opacity: 0.3}),
-            new THREE.MeshBasicMaterial({color:0x1a1365, transparent: true, opacity: 0.3}),
-            new THREE.MeshBasicMaterial({color:0x82c892, transparent: true, opacity: 0.3}),
-            new THREE.MeshBasicMaterial({color:0x7fd1dd, transparent: true, opacity: 0.3}),
-            new THREE.MeshBasicMaterial({color:0xf79361, transparent: true, opacity: 0.3}),
-            new THREE.MeshBasicMaterial({color:0xcb79ff, transparent: true, opacity: 0.3})
+            new THREE.MeshBasicMaterial({color:0xffffff, transparent: true, opacity: 0.5}),
+            new THREE.MeshBasicMaterial({color:0xf6f05e, transparent: true, opacity: 0.5}),
+            new THREE.MeshBasicMaterial({color:0x82c892, transparent: true, opacity: 0.5}),
+            new THREE.MeshBasicMaterial({color:0x7fd1dd, transparent: true, opacity: 0.5}),
+            new THREE.MeshBasicMaterial({color:0xf79361, transparent: true, opacity: 0.5}),
+            new THREE.MeshBasicMaterial({color:0xcb79ff, transparent: true, opacity: 0.5})
         ];
         var boxMesh_target = new THREE.Mesh( boxGeometry_target, boxMaterial_target );
-        boxMesh_target.position.set(0, 0, 0);
+        boxMesh_target.position.set(4, 2, 3);
         scene.add(boxMesh_target);
 
-        var boxGeometry_helper = new THREE.BoxGeometry(2.1,2.1,3);
-        var boxMaterial_helper =new THREE.PointsMaterial({
-            color:0xffffff,
-            size: 0.05
-        });
-
-        var boxPoints = new THREE.Points( boxGeometry_helper, boxMaterial_helper );
-        boxPoints.position.set(0, 0, 0);
-        scene.add( boxPoints );
+        // add orbit controls
+        var orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
+        orbitControls.minDistance = 5;
+        orbitControls.maxDistance = 20;
 
         // render
-        function render() {
-            renderer.render( scene, camera );
-        }
-
         function animate() {
             requestAnimationFrame(animate);
             orbitControls.update();
-            render();
+            renderer.render(scene, camera);
         }
         animate();
 
@@ -128,45 +100,55 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         }
 
-        // time count
-        var timeCount = 0;
-        var time = 0;
-        var con = {};
-        var json;
+        // <!-- three-freeform-controls -->
+
+        // initialize three-freeform-controls
+        const controlsManager = new FreeformControls.ControlsManager(camera, renderer.domElement);
+        scene.add(controlsManager);
+
+        // anchor controls to the box
+        const controls_box = controlsManager.anchor(boxMesh, {
+            hideOtherHandlesOnDrag: false,
+            showHelperPlane: false
+        });
+
+        controls_box.showAll(false);
+        controls_box.showByNames(
+            [
+            FreeformControls.DEFAULT_HANDLE_GROUP_NAME.XPT,
+            FreeformControls.DEFAULT_HANDLE_GROUP_NAME.YPT,
+            FreeformControls.DEFAULT_HANDLE_GROUP_NAME.ZPT,
+            ],
+            true
+        );
+
+        // disable orbit controls while the freeform-controls are in use
+        controlsManager.listen(FreeformControls.EVENTS.DRAG_START, () => {
+            orbitControls.enabled = false;
+        });
+        controlsManager.listen(FreeformControls.EVENTS.DRAG_STOP, () => {
+            orbitControls.enabled = true;
+        });
+
+
+        // click action
 
         function timecount(){
             document.getElementById("block").style.display="none";
             document.getElementById("timestop").disabled=false;
-            // document.getElementById("time").value = timeCount;
-            timeCount++;
-            setTimeout("timecount()",1); 
+
             document.getElementById("timesum").disabled=true;
         }
 
         function timestop(){
-            clearTimeout(timeCount);
-            time = timeCount;
-            record_data();
             document.getElementById("timestop").disabled=true;
             document.getElementById("subm").disabled=false;
         }
 
         function subm(){
-            window.location.href="scaling-test-D3-T4.html";
+            window.location.href="translation-ex-D1-E2.html";
         }
-
-        function record_data(){
-            con["s_d3_task3_time"] = time;
-            con["s_d3_task3_x"] = boxMesh.scale.x;
-            con["s_d3_task3_y"] = boxMesh.scale.y;
-            con["s_d3_task3_z"] = boxMesh.scale.z;
-            json = JSON.stringify(con);
-            localStorage.sd3t3 = json;
-            // window.localStorage.setItem("test", "test");
-            // localStorage.r_d1_task1 = json;
-            // json=JSON.parse(localStorage.getItem("R-D1-Task1"));
-        }
-
+        
     </script>
 </body>
 </html>
