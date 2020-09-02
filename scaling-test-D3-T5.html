@@ -58,20 +58,25 @@
         orbitControls.minDistance = 5;
         orbitControls.maxDistance = 20;
 
-        // add tetrahedron
-        var tetrahedronGeometry = new THREE.TetrahedronGeometry( 1, 0 );
-        tetrahedronGeometry.faces[0].color.setHex( 0x7fd1dd );
-        tetrahedronGeometry.faces[1].color.setHex( 0x82c892 );
-        tetrahedronGeometry.faces[2].color.setHex( 0xf6f05e );
-        tetrahedronGeometry.faces[3].color.setHex( 0xcb79ff );
-        
-        var tetrahedronMaterial = new THREE.MeshBasicMaterial({
+        // add octahedron
+        var octahedronGeometry = new THREE.OctahedronGeometry(0.7,0);
+        octahedronGeometry.faces[0].color.setHex( 0x808080 );
+        octahedronGeometry.faces[1].color.setHex( 0xf26d64 );
+        octahedronGeometry.faces[2].color.setHex( 0xcb79ff );
+        octahedronGeometry.faces[3].color.setHex( 0xf79361 );
+        octahedronGeometry.faces[4].color.setHex( 0x7fd1dd );
+        octahedronGeometry.faces[5].color.setHex( 0x82c892 );
+        octahedronGeometry.faces[6].color.setHex( 0xf6f05e );
+        octahedronGeometry.faces[7].color.setHex( 0x4744aa );
+        var octahedronMaterial = new THREE.MeshBasicMaterial({
             vertexColors: THREE.FaceColors
         });
 
-        var tetrahedronMesh = new THREE.Mesh( tetrahedronGeometry, tetrahedronMaterial );
-        tetrahedronMesh.position.set(0, 0, 0);
-        scene.add(tetrahedronMesh);
+        var octahedronMesh = new THREE.Mesh( octahedronGeometry, octahedronMaterial );
+        octahedronMesh.position.set(0, 0, 0);
+        octahedronMesh.rotation.set(0.75, 0, 0);
+
+        scene.add(octahedronMesh);
 
         var tetrahedronTransformControls = new THREE.TransformControls( camera, renderer.domElement );
         tetrahedronTransformControls.addEventListener( 'change', render );
@@ -79,38 +84,43 @@
             orbitControls.enabled = ! event.value;;
         } );
 
-        tetrahedronTransformControls.attach( tetrahedronMesh );
+        tetrahedronTransformControls.attach( octahedronMesh );
         scene.add( tetrahedronTransformControls );
 
         tetrahedronTransformControls.setMode( "scale" );
         tetrahedronTransformControls.setSpace( "world" );
         tetrahedronTransformControls.visible = true;
 
-        var tetrahedronGeometry_target = new THREE.TetrahedronGeometry( 3, 0 );
-        tetrahedronGeometry_target.faces[0].color.setHex( 0x7fd1dd );
-        tetrahedronGeometry_target.faces[1].color.setHex( 0x82c892 );
-        tetrahedronGeometry_target.faces[2].color.setHex( 0xf6f05e );
-        tetrahedronGeometry_target.faces[3].color.setHex( 0xcb79ff );
-        
-        var tetrahedronMaterial_target = new THREE.MeshBasicMaterial({
+        var octahedronGeometry_target = new THREE.OctahedronGeometry(2.1,0);
+        octahedronGeometry_target.faces[0].color.setHex( 0x808080 );
+        octahedronGeometry_target.faces[1].color.setHex( 0xf26d64 );
+        octahedronGeometry_target.faces[2].color.setHex( 0xcb79ff );
+        octahedronGeometry_target.faces[3].color.setHex( 0xf79361 );
+        octahedronGeometry_target.faces[4].color.setHex( 0x7fd1dd );
+        octahedronGeometry_target.faces[5].color.setHex( 0x82c892 );
+        octahedronGeometry_target.faces[6].color.setHex( 0xf6f05e );
+        octahedronGeometry_target.faces[7].color.setHex( 0x4744aa );
+        var octahedronMaterial_target = new THREE.MeshBasicMaterial({
             vertexColors: THREE.FaceColors,
             transparent: true,
             opacity: 0.5
         });
 
-        var tetrahedronMesh_target = new THREE.Mesh( tetrahedronGeometry_target, tetrahedronMaterial_target );
-        tetrahedronMesh_target.position.set(0, 0, 0);
-        scene.add(tetrahedronMesh_target);
+        var octahedronMesh_target = new THREE.Mesh( octahedronGeometry_target, octahedronMaterial_target );
+        octahedronMesh_target.rotation.set(0.75, 0, 0);
+        scene.add(octahedronMesh_target);
 
-        var tetrahedronGeometry_helper = new THREE.TetrahedronGeometry( 3, 0 );
-        var tetrahedronMaterial_helper =new THREE.PointsMaterial({
+        var octahedronGeometry_helper = new THREE.OctahedronGeometry(2.1,0);
+        var octahedronMaterial_helper =new THREE.PointsMaterial({
             color:0xffffff,
-            size: 0.05
+            size: 0.05,
+            depthTest: false
         });
 
-        var tetrahedronPoints = new THREE.Points( tetrahedronGeometry_helper, tetrahedronMaterial_helper );
-        tetrahedronPoints.position.set(0, 0, 0);
-        scene.add( tetrahedronPoints );
+        var octahedronPoints = new THREE.Points( octahedronGeometry_helper, octahedronMaterial_helper );
+        octahedronPoints.position.set(0, 0, 0);
+        octahedronPoints.rotation.set(0.75, 0, 0);
+        scene.add( octahedronPoints );
 
         // render
         function render() {
@@ -161,9 +171,9 @@
 
         function record_data(){
             con["s_d3_task5_time"] = time;
-            con["s_d3_task5_x"] = tetrahedronMesh.scale.x;
-            con["s_d3_task5_y"] = tetrahedronMesh.scale.y;
-            con["s_d3_task5_z"] = tetrahedronMesh.scale.z;
+            con["s_d3_task5_x"] = octahedronMesh.scale.x;
+            con["s_d3_task5_y"] = octahedronMesh.scale.y;
+            con["s_d3_task5_z"] = octahedronMesh.scale.z;
             json = JSON.stringify(con);
             localStorage.sd3t5 = json;
             // window.localStorage.setItem("test", "test");

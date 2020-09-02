@@ -52,36 +52,45 @@
         gridHelper.position.y -= 2;
         scene.add(gridHelper);
 
-        // add tetrahedron
-        var tetrahedronGeometry = new THREE.TetrahedronGeometry( 1, 0 );
-        tetrahedronGeometry.faces[0].color.setHex( 0x7fd1dd );
-        tetrahedronGeometry.faces[1].color.setHex( 0x82c892 );
-        tetrahedronGeometry.faces[2].color.setHex( 0xf6f05e );
-        tetrahedronGeometry.faces[3].color.setHex( 0xcb79ff );
-        
-        var tetrahedronMaterial = new THREE.MeshBasicMaterial({
+        // add octahedron
+        var octahedronGeometry = new THREE.OctahedronGeometry(1,0);
+        octahedronGeometry.faces[0].color.setHex( 0x7fd1dd );
+        octahedronGeometry.faces[1].color.setHex( 0xf26d64 );
+        octahedronGeometry.faces[2].color.setHex( 0xcb79ff );
+        octahedronGeometry.faces[3].color.setHex( 0x4744aa );
+        octahedronGeometry.faces[4].color.setHex( 0x82c892 );
+        octahedronGeometry.faces[5].color.setHex( 0x808080 );
+        octahedronGeometry.faces[6].color.setHex( 0xf6f05e );
+        octahedronGeometry.faces[7].color.setHex( 0xf79361 );
+        var octahedronMaterial = new THREE.MeshBasicMaterial({
             vertexColors: THREE.FaceColors
         });
 
-        var tetrahedronMesh = new THREE.Mesh( tetrahedronGeometry, tetrahedronMaterial );
-        tetrahedronMesh.position.set(0, 0, 0);
-        scene.add(tetrahedronMesh);
+        var octahedronMesh = new THREE.Mesh( octahedronGeometry, octahedronMaterial );
+        octahedronMesh.position.set(0, 0, 0);
+        octahedronMesh.rotation.set(0.75, 0, 0);
 
-        var tetrahedronGeometry_target = new THREE.TetrahedronGeometry( 1, 0 );
-        tetrahedronGeometry_target.faces[0].color.setHex( 0x7fd1dd );
-        tetrahedronGeometry_target.faces[1].color.setHex( 0x82c892 );
-        tetrahedronGeometry_target.faces[2].color.setHex( 0xf6f05e );
-        tetrahedronGeometry_target.faces[3].color.setHex( 0xcb79ff );
-        
-        var tetrahedronMaterial_target = new THREE.MeshBasicMaterial({
+        scene.add(octahedronMesh);
+
+        var octahedronGeometry_target = new THREE.OctahedronGeometry(1,0);
+        octahedronGeometry_target.faces[0].color.setHex( 0x7fd1dd );
+        octahedronGeometry_target.faces[1].color.setHex( 0xf26d64 );
+        octahedronGeometry_target.faces[2].color.setHex( 0xcb79ff );
+        octahedronGeometry_target.faces[3].color.setHex( 0x4744aa );
+        octahedronGeometry_target.faces[4].color.setHex( 0x82c892 );
+        octahedronGeometry_target.faces[5].color.setHex( 0x808080 );
+        octahedronGeometry_target.faces[6].color.setHex( 0xf6f05e );
+        octahedronGeometry_target.faces[7].color.setHex( 0xf79361 );
+        var octahedronMaterial_target = new THREE.MeshBasicMaterial({
             vertexColors: THREE.FaceColors,
             transparent: true,
             opacity: 0.5
         });
 
-        var tetrahedronMesh_target = new THREE.Mesh( tetrahedronGeometry_target, tetrahedronMaterial_target );
-        tetrahedronMesh_target.position.set(4, 2, 3);
-        scene.add(tetrahedronMesh_target);
+        var octahedronMesh_target = new THREE.Mesh( octahedronGeometry_target, octahedronMaterial_target );
+        octahedronMesh_target.position.set(4, 2, 3);
+        octahedronMesh_target.rotation.set(0.75, 0, 0);
+        scene.add(octahedronMesh_target);
 
         // add orbit controls
         var orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -111,7 +120,7 @@
         scene.add(controlsManager);
 
         // anchor controls to the octahedron
-        const controls_tetrahedron = controlsManager.anchor(tetrahedronMesh, {
+        const controls_tetrahedron = controlsManager.anchor(octahedronMesh, {
             hideOtherHandlesOnDrag: false,
             showHelperPlane: false
         });
@@ -163,9 +172,9 @@
 
         function record_data(){
             con["t_d1_task5_time"] = time;
-            con["t_d1_task5_x"] = tetrahedronMesh.position.x;
-            con["t_d1_task5_y"] = tetrahedronMesh.position.y;
-            con["t_d1_task5_z"] = tetrahedronMesh.position.z;
+            con["t_d1_task5_x"] = octahedronMesh.position.x;
+            con["t_d1_task5_y"] = octahedronMesh.position.y;
+            con["t_d1_task5_z"] = octahedronMesh.position.z;
             json = JSON.stringify(con);
             localStorage.td1t5 = json;
             // window.localStorage.setItem("test", "test");

@@ -67,7 +67,7 @@
         octahedronGeometry.faces[4].color.setHex( 0x7fd1dd );
         octahedronGeometry.faces[5].color.setHex( 0x82c892 );
         octahedronGeometry.faces[6].color.setHex( 0xf6f05e );
-        octahedronGeometry.faces[7].color.setHex( 0x1a1365 );
+        octahedronGeometry.faces[7].color.setHex( 0x4744aa );
         var octahedronMaterial = new THREE.MeshBasicMaterial({
             vertexColors: THREE.FaceColors
         });
@@ -97,7 +97,7 @@
         octahedronGeometry_target.faces[4].color.setHex( 0x7fd1dd );
         octahedronGeometry_target.faces[5].color.setHex( 0x82c892 );
         octahedronGeometry_target.faces[6].color.setHex( 0xf6f05e );
-        octahedronGeometry_target.faces[7].color.setHex( 0x1a1365 );
+        octahedronGeometry_target.faces[7].color.setHex( 0x4744aa );
         var octahedronMaterial_target = new THREE.MeshBasicMaterial({
             vertexColors: THREE.FaceColors,
             transparent: true,
@@ -111,7 +111,8 @@
         var octahedronGeometry_helper = new THREE.OctahedronGeometry(2.1,0);
         var octahedronMaterial_helper =new THREE.PointsMaterial({
             color:0xffffff,
-            size: 0.05
+            size: 0.05,
+            depthTest: false
         });
 
         var octahedronPoints = new THREE.Points( octahedronGeometry_helper, octahedronMaterial_helper );
